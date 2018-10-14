@@ -1,0 +1,94 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <script src="/socket.io/socket.io.js"></script>
+  <title>Main</title>
+</head>
+
+<body style="background-color:Black;">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+  <div id="data_area" class="container-fluid no-gutters">
+    <div class="row">
+      <div class="col text-center">
+        <h1 style="font-family: 'Orbitron', sans-serif; font-size:8em; font-weight:800; color:CornFlowerBlue;padding-bottom:30px">컴프레서 온도</h1>
+      </div>
+    </div>
+    <!-- Status 1 */ -->
+    <div class="row">
+      <div class="col-4 text-center">
+          <span style="font-family: 'Orbitron', sans-serif; font-size:12em; font-weight:600; color:Lavender ">50</span>
+      </div>
+      <div class="col-4 text-center">
+          <span style="font-family: 'Orbitron', sans-serif; font-size:12em; font-weight:600; color:Pink ">75</span>
+      </div>
+      <div class="col-4 text-center">
+          <span style="font-family: 'Orbitron', sans-serif; font-size:12em; font-weight:600; color:HotPink ">100</span>
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-4">
+        <p class="text-center" style="padding-top:40px;padding-bottom:40px;background-color:LightSeaGreen">
+            <span style="font-family: 'Orbitron', sans-serif; font-size:8em; font-weight:600; color:white">{{sensor50}}<sup>°C</sup></span>
+        </p>
+      </div>
+      <div class="col-4">
+        <p class="text-center" style="padding-top:40px;padding-bottom:40px;background-color:DarkCyan">
+            <span style="font-family: 'Orbitron', sans-serif; font-size:8em; font-weight:600; color:white">{{sensor75}}<sup>°C</sup></span>
+        </p>
+      </div>
+      <div class="col-4">
+        <p class="text-center" style="padding-top:40px;padding-bottom:40px;background-color:DarkGreen">
+            <span style="font-family: 'Orbitron', sans-serif; font-size:8em; font-weight:600; color:white">{{sensor100}}<sup>°C</sup></span>
+        </p>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-8 text-center">
+          <span style="font-family: 'Orbitron', sans-serif; font-size:8em; font-weight:600; color:Black "></span>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col">
+        <p class="text-center">
+          <span style="font-family: 'Orbitron', sans-serif; font-size:8em; font-weight:600; color:black">{{sensor_mat}}
+            <sup>°C</sup>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+<!-- SCRIPT AREA -->
+<script>
+  var data_area = new Vue({
+    el: '#data_area',
+    data: {
+      sensor50: '0',
+      sensor75: '0',
+      sensor100: '0',
+      sensor_mat: '0'
+    }
+  });
+
+  var socket = io.connect();
+  socket.on('data50', function (data) {
+    data_area.sensor50 = data['temperature'][1];
+  });
+  socket.on('data75', function (data) {
+    data_area.sensor75 = data['temperature'][1];
+  });
+  socket.on('data100', function (data) {
+    data_area.sensor100 = data['temperature'][1];
+  });
+  socket.on('datamisc', function (data) {
+    data_area.sensor_mat = data['temperature'][1];
+  });
+</script>
+
+</html>
